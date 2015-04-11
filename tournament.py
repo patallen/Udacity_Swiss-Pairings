@@ -17,7 +17,8 @@ def deleteMatches():
     """Remove all the match records from the database."""
 
     db, c = connect()
-    c.execute("delete from matches")
+    SQL = "delete from matches"
+    c.execute(SQL)
     db.commit()
     db.close()
 
@@ -26,7 +27,8 @@ def deletePlayers():
     """Remove all the player records from the database."""
 
     db, c = connect()
-    c.execute("delete from players")
+    SQL = "delete from players"
+    c.execute(SQL)
     db.commit()
     db.close()
 
@@ -35,7 +37,8 @@ def countPlayers():
     """Returns the number of players currently registered."""
 
     db, c = connect()
-    c.execute("select count(*) from players")
+    SQL = "select count(*) from players"
+    c.execute(SQL)
     count = c.fetchone()
     db.close()
     return int(count[0])
@@ -45,7 +48,9 @@ def registerPlayer(name):
     """Adds a player to the tournament database."""
 
     db, c = connect()
-    c.execute("insert into players (name) values (%s)", (name,))
+    SQL = "insert into players (name) values(%s)"
+    data = (name,)
+    c.execute(SQL, data)
     db.commit()
     db.close()
 
@@ -57,7 +62,8 @@ def playerStandings():
     """
 
     db, c = connect()
-    c.execute("select * from rankings;")
+    SQL = "select * from rankings;"
+    c.execute(SQL)
     result = c.fetchall()
     db.close()
     return result
@@ -67,8 +73,9 @@ def reportMatch(winner, loser):
     """Records the outcome of a single match between two players."""
 
     db, c = connect()
-    c.execute("insert into matches values (%s, %s, %s)",
-              (winner, loser, winner))
+    SQL = "insert into matches values (%s, %s, %s);"
+    data = (winner, loser, winner)
+    c.execute(SQL, data)
     db.commit()
     db.close()
 
