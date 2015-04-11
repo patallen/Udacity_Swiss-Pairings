@@ -3,7 +3,7 @@
 # tournament.py -- implementation of a Swiss-system tournament
 #
 
-import psycopg2
+import psycopg2, bleach
 
 
 def connect():
@@ -47,6 +47,7 @@ def countPlayers():
 def registerPlayer(name):
     """Adds a player to the tournament database."""
 
+    name = bleach.clean(name)
     db, c = connect()
     SQL = "insert into players (name) values(%s)"
     data = (name,)
