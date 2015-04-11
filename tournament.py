@@ -8,11 +8,13 @@ import psycopg2
 
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
+
     return psycopg2.connect("dbname=tournament")
 
 
 def deleteMatches():
     """Remove all the match records from the database."""
+
     db = connect()
     c = db.cursor()
     c.execute("delete from matches")
@@ -22,6 +24,7 @@ def deleteMatches():
 
 def deletePlayers():
     """Remove all the player records from the database."""
+
     db = connect()
     c = db.cursor()
     c.execute("delete from players")
@@ -31,6 +34,7 @@ def deletePlayers():
 
 def countPlayers():
     """Returns the number of players currently registered."""
+
     db = connect()
     c = db.cursor()
     c.execute("select count(*) from players")
@@ -41,6 +45,7 @@ def countPlayers():
 
 def registerPlayer(name):
     """Adds a player to the tournament database."""
+
     db = connect()
     c = db.cursor()
     c.execute("insert into players (name) values (%s)", (name,))
@@ -53,6 +58,7 @@ def playerStandings():
     Returns a list of the players and their win records, sorted by wins.
     Returns a list of tuples, each of which contains (id, name, wins, matches):
     """
+
     db = connect()
     c = db.cursor()
     c.execute("select * from rankings;")
@@ -63,6 +69,7 @@ def playerStandings():
 
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players."""
+
     db = connect()
     c = db.cursor()
     c.execute("insert into matches values (%s, %s, %s)",
@@ -72,20 +79,11 @@ def reportMatch(winner, loser):
 
 
 def swissPairings():
-    """Returns a list of pairs of players for the next round of a match.
-
-    Assuming that there are an even number of players registered, each player
-    appears exactly once in the pairings.  Each player is paired with another
-    player with an equal or nearly-equal win record, that is, a player adjacent
-    to him or her in the standings.
-
-    Returns:
-      A list of tuples, each of which contains (id1, name1, id2, name2)
-        id1: the first player's unique id
-        name1: the first player's name
-        id2: the second player's unique id
-        name2: the second player's name
     """
+    Returns a list of pairs of players for the next round of a match.
+    Returns a list of tuples, each of which contains (id1, name1, id2, name2)
+    """
+
     standings = playerStandings()
     count = 0
     pairs = []
