@@ -8,15 +8,15 @@ import psycopg2
 
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
-
-    return psycopg2.connect("dbname=tournament")
+    db = psycopg2.connect("dbname=tournament")
+    cursor = db.cursor();
+    return db, cursor
 
 
 def deleteMatches():
     """Remove all the match records from the database."""
 
-    db = connect()
-    c = db.cursor()
+    db, c = connect()
     c.execute("delete from matches")
     db.commit()
     db.close()
@@ -25,8 +25,7 @@ def deleteMatches():
 def deletePlayers():
     """Remove all the player records from the database."""
 
-    db = connect()
-    c = db.cursor()
+    db, c = connect()
     c.execute("delete from players")
     db.commit()
     db.close()
@@ -35,8 +34,7 @@ def deletePlayers():
 def countPlayers():
     """Returns the number of players currently registered."""
 
-    db = connect()
-    c = db.cursor()
+    db, c = connect()
     c.execute("select count(*) from players")
     count = c.fetchone()
     db.close()
@@ -46,8 +44,7 @@ def countPlayers():
 def registerPlayer(name):
     """Adds a player to the tournament database."""
 
-    db = connect()
-    c = db.cursor()
+    db, c = connect()
     c.execute("insert into players (name) values (%s)", (name,))
     db.commit()
     db.close()
@@ -59,8 +56,7 @@ def playerStandings():
     Returns a list of tuples, each of which contains (id, name, wins, matches):
     """
 
-    db = connect()
-    c = db.cursor()
+    db, c = connect()
     c.execute("select * from rankings;")
     result = c.fetchall()
     db.close()
@@ -70,8 +66,7 @@ def playerStandings():
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players."""
 
-    db = connect()
-    c = db.cursor()
+    db, c = connect()
     c.execute("insert into matches values (%s, %s, %s)",
               (winner, loser, winner))
     db.commit()
