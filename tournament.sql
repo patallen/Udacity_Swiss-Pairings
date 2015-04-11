@@ -1,5 +1,9 @@
 -- Table definitions for the tournament project.
 
+-- Create and connect to tournament database
+drop database if exists tournament;
+create database tournament;
+\c tournament
 
 -- Create table to hold players' unique ID and non-unique full name
 create table players (
